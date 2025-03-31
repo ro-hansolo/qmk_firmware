@@ -1,0 +1,6 @@
+VIA_ENABLE         = yes
+VIAL_ENABLE        = yes
+VIALRGB_ENABLE     = yes
+ENCODER_MAP_ENABLE = yes
+SPLIT_KEYBOARD = yes
+RGB_MATRIX_CUSTOM_USER = yes
