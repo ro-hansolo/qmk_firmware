@@ -35,6 +35,8 @@ RGB_MATRIX_EFFECT(corne_layer_rgb)
 #define COLOR_FEYN_INDIGO (RGB){110, 30, 190}    // Feyn chat indigo
 #define COLOR_SECURITY_GOLD (RGB){230, 190, 40}  // Security gold
 #define COLOR_BLACK       (RGB){0, 0, 0}         // Off/unused keys
+#define COLOR_ELECTRIC_BLUE (RGB){80, 188, 255}  // Electric blue for text selection
+#define COLOR_TURQUOISE   (RGB){64, 224, 208}    // Turquoise for text selection
 
 // Key groups for easier checking
 #define IS_ALPHA(kc) ((kc >= KC_Q && kc <= KC_P) || (kc >= KC_A && kc <= KC_L) || (kc >= KC_Z && kc <= KC_SLSH))
@@ -48,9 +50,14 @@ RGB_MATRIX_EFFECT(corne_layer_rgb)
 #define IS_BUN_MACRO(kc) (kc == BUN_DEV || kc == BUN_PRETTIER || kc == BUN_LINT || kc == VERCEL_DEPLOY)
 #define IS_SC_MACRO(kc) (kc == SGUI(KC_3) || kc == SGUI(KC_4) || kc == SGUI(KC_5))
 #define IS_CRITICAL_KEY(kc) (kc == KC_ENT || kc == KC_SPC || kc == KC_BSPC || kc == KC_DEL)
+#define IS_TEXT_SELECTION(kc) (kc == LSFT(LGUI(KC_LEFT)) || kc == LSFT(LGUI(KC_RIGHT)) || kc == LSFT(LALT(KC_LEFT)) || kc == LSFT(LALT(KC_RIGHT)))
 
 // Layer 1 specific color handling
 static RGB get_layer1_color(uint16_t keycode) {
+    // Text selection shortcuts
+    if (IS_TEXT_SELECTION(keycode)) {
+        return COLOR_FERRARI_RED;
+    }
     // Number keys with shift-dependent colors
     if (keycode >= KC_1 && keycode <= KC_0) {
         return get_mods() & MOD_MASK_SHIFT ? COLOR_YELLOW : COLOR_PINK;

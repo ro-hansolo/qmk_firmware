@@ -38,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_ESC,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, SGUI(KC_5),         SGUI(KC_4),    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  KC_TRNS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-      KC_TRNS, KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS, KC_TRNS,           SGUI(KC_3), XXXXXXX,   KC_UP, XXXXXXX, XXXXXXX, XXXXXXX, MO(2),
+      KC_TRNS, KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS, KC_TRNS,           SGUI(KC_3), LSFT(LGUI(KC_LEFT)),   KC_UP,  LSFT(LGUI(KC_RIGHT)), LSFT(LALT(KC_LEFT)), LSFT(LALT(KC_RIGHT)), MO(2),
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
       KC_TRNS, KC_GRV, VERCEL_DEPLOY, BUN_PRETTIER, BUN_LINT, BUN_DEV,                      KC_LEFT, KC_DOWN, KC_RGHT, LALT(KC_LEFT), LALT(KC_RGHT), MO(3),
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
