@@ -42,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
       KC_TRNS, KC_GRV, VERCEL_DEPLOY, BUN_PRETTIER, BUN_LINT, BUN_DEV,                      KC_LEFT, KC_DOWN, KC_RGHT, LALT(KC_LEFT), LALT(KC_RGHT), MO(3),
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        KC_TRNS, KC_TRNS, KC_LSFT,                LSFT(KC_TAB), KC_TRNS, KC_TRNS
+                                        KC_TRNS, KC_TRNS, KC_LSFT,                LSFT(KC_ENT), KC_TRNS, KC_TRNS
                                       //`--------------------------'  `--------------------------'
     ),
 

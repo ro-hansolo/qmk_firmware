@@ -11,41 +11,32 @@ RGB_MATRIX_EFFECT(corne_layer_rgb)
 #include "action_layer.h"
 #include "custom_keycodes.h"
 
-// Color definitions
-typedef struct {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-} rgb_color_t;
+// Define base RGB colors with strong values
+#define COLOR_PURPLE      (RGB){150, 0, 255}    // Alpha keys
+#define COLOR_YELLOW_GREEN (RGB){200, 255, 0}   // Modifiers
+#define COLOR_ORANGE      (RGB){255, 120, 0}    // Numbers/special
+#define COLOR_TEAL        (RGB){0, 255, 255}    // Arrows
+#define COLOR_PURPLE_BLUE (RGB){100, 0, 255}    // Layer 1 symbols
+#define COLOR_YELLOW      (RGB){255, 255, 0}    // Shifted symbols
+#define COLOR_CYAN        (RGB){0, 255, 255}    // RGB controls/special keys
+#define COLOR_RED         (RGB){255, 0, 0}      // Space/enter/boot
+#define COLOR_PINK        (RGB){248, 152, 128}  // Pink orange
+#define COLOR_BRIGHT_BLUE (RGB){50, 50, 255}    // Alt+arrow keys
 
-// Base colors with descriptive names
-static const rgb_color_t COLORS = {
-    .PURPLE = {150, 0, 255},         // Alpha keys
-    .YELLOW_GREEN = {200, 255, 0},   // Modifiers
-    .ORANGE = {255, 120, 0},         // Numbers/special
-    .TEAL = {0, 255, 255},           // Arrows
-    .PURPLE_BLUE = {100, 0, 255},    // Layer 1 symbols
-    .YELLOW = {255, 255, 0},         // Shifted symbols
-    .CYAN = {0, 255, 255},           // RGB controls/special keys
-    .RED = {255, 0, 0},              // Space/enter/boot
-    .PINK = {248, 152, 128},         // Pink orange
-    .BRIGHT_BLUE = {50, 50, 255},    // Alt+arrow keys
-    
-    // App shortcut colors
-    .HOT_PINK = {255, 20, 147},      // Hot pink for bun macros
-    .WHITE = {255, 255, 255},        // White for settings
-    .GREEN = {0, 255, 0},            // Green for WhatsApp
-    .MAIL_BLUE = {0, 120, 255},      // Blue for mail
-    .REDDISH_PINK = {255, 60, 100},  // Reddish pink for music
-    .REDDIT_ORANGE = {255, 69, 0},   // Reddit orange
-    .FERRARI_RED = {220, 30, 5},     // Ferrari red
-    .LOCAL_NAVY = {25, 25, 150},     // Localhost navy
-    .FEYN_INDIGO = {110, 30, 190},   // Feyn chat indigo
-    .SECURITY_GOLD = {230, 190, 40}, // Security gold
-    .BLACK = {0, 0, 0}               // Off state
-};
+// New colors for custom macros
+#define COLOR_HOT_PINK    (RGB){255, 20, 147}   // Hot pink for bun macros
+#define COLOR_WHITE       (RGB){255, 255, 255}  // White for settings
+#define COLOR_GREEN       (RGB){0, 255, 0}      // Green for WhatsApp
+#define COLOR_MAIL_BLUE   (RGB){0, 120, 255}    // Blue for mail
+#define COLOR_REDDISH_PINK (RGB){255, 60, 100}  // Reddish pink for music
+#define COLOR_REDDIT_ORANGE (RGB){255, 69, 0}    // Reddit orange, more red than yellow
+#define COLOR_FERRARI_RED (RGB){220, 30, 5}      // Ferrari red
+#define COLOR_LOCAL_NAVY (RGB){25, 25, 150}      // Localhost navy
+#define COLOR_FEYN_INDIGO (RGB){110, 30, 190}    // Feyn chat indigo
+#define COLOR_SECURITY_GOLD (RGB){230, 190, 40}  // Security gold
+#define COLOR_BLACK       (RGB){0, 0, 0}         // Off/unused keys
 
-// Key category check macros
+// Key groups for easier checking
 #define IS_ALPHA(kc) ((kc >= KC_Q && kc <= KC_P) || (kc >= KC_A && kc <= KC_L) || (kc >= KC_Z && kc <= KC_SLSH))
 #define IS_MODIFIER(kc) (kc == KC_LSFT || kc == KC_RSFT || kc == KC_LCTL || kc == KC_LGUI || kc == KC_LALT)
 #define IS_LAYER_KEY(kc) (kc == MO(1) || kc == MO(2) || kc == MO(3))
@@ -58,94 +49,96 @@ static const rgb_color_t COLORS = {
 #define IS_SC_MACRO(kc) (kc == SGUI(KC_3) || kc == SGUI(KC_4) || kc == SGUI(KC_5))
 #define IS_CRITICAL_KEY(kc) (kc == KC_ENT || kc == KC_SPC || kc == KC_BSPC || kc == KC_DEL)
 
-// Layer-specific color handling functions
-static rgb_color_t get_layer1_color(uint16_t keycode) {
+// Layer 1 specific color handling
+static RGB get_layer1_color(uint16_t keycode) {
     // Number keys with shift-dependent colors
     if (keycode >= KC_1 && keycode <= KC_0) {
-        return get_mods() & MOD_MASK_SHIFT ? COLORS.YELLOW : COLORS.PINK;
+        return get_mods() & MOD_MASK_SHIFT ? COLOR_YELLOW : COLOR_PINK;
     }
     
     if (IS_SC_MACRO(keycode)) {
-        return COLORS.REDDIT_ORANGE;
+        return COLOR_REDDIT_ORANGE;
     }
     
     // Symbol keys
     if (keycode == KC_MINS || keycode == KC_EQL || 
         keycode == KC_LBRC || keycode == KC_RBRC || 
         keycode == KC_BSLS || keycode == KC_GRV) {
-        return get_mods() & MOD_MASK_SHIFT ? COLORS.YELLOW : COLORS.ORANGE;
+        return get_mods() & MOD_MASK_SHIFT ? COLOR_YELLOW : COLOR_ORANGE;
     }
     
     // Tab/Del/Backspace
     if (keycode == KC_TAB || keycode == KC_DEL || keycode == KC_BSPC) {
-        return COLORS.RED;
+        return COLOR_RED;
     }
     
     // Navigation
     if (IS_ARROW(keycode)) {
-        return COLORS.TEAL;
+        return COLOR_TEAL;
     } else if (keycode == LALT(KC_LEFT) || keycode == LALT(KC_RGHT)) {
-        return COLORS.BRIGHT_BLUE;
+        return COLOR_BRIGHT_BLUE;
     } else if (keycode == XXXXXXX) {
-        return COLORS.BLACK;
+        return COLOR_BLACK;
     }
     
     // Default for layer 1
-    return COLORS.PURPLE;
+    return COLOR_PURPLE;
 }
 
-static rgb_color_t get_layer2_color(uint16_t keycode) {
+// Layer 2 app shortcut color handling
+static RGB get_layer2_color(uint16_t keycode) {
     if (keycode == XXXXXXX) {
-        return COLORS.BLACK;
+        return COLOR_BLACK;
     }
     if (keycode == KC_TRNS) {
-        return COLORS.YELLOW_GREEN;
+        return COLOR_YELLOW_GREEN;
     }
     
     // App shortcut macros
     switch (keycode) {
-        case SP_CURSOR:          return COLORS.TEAL;
-        case SP_SAFARI:          return COLORS.BRIGHT_BLUE;
-        case SP_TERMINAL:        return COLORS.PINK;
-        case SP_SETTINGS:        return COLORS.WHITE;
-        case SP_GITHUB:          return COLORS.PURPLE;
-        case SP_WHATSAPP:        return COLORS.GREEN;
-        case SP_MAIL:            return COLORS.MAIL_BLUE;
-        case SP_MUSIC:           return COLORS.REDDISH_PINK;
-        case SP_REDDIT:          return COLORS.REDDIT_ORANGE;
-        case SP_YOUTUBE:         return COLORS.RED;
-        case SP_MESSAGES:        return COLORS.YELLOW_GREEN;
-        case SP_MOTORSPORT:      return COLORS.FERRARI_RED;
-        case SP_LOCALHOST:       return COLORS.LOCAL_NAVY;
-        case SP_FEYNCHAT:        return COLORS.FEYN_INDIGO;
-        case SP_PASSWORD_MANAGER: return COLORS.SECURITY_GOLD;
-        default:                 return COLORS.PURPLE;
+        case SP_CURSOR:          return COLOR_TEAL;
+        case SP_SAFARI:          return COLOR_BRIGHT_BLUE;
+        case SP_TERMINAL:        return COLOR_PINK;
+        case SP_SETTINGS:        return COLOR_WHITE;
+        case SP_GITHUB:          return COLOR_PURPLE;
+        case SP_WHATSAPP:        return COLOR_GREEN;
+        case SP_MAIL:            return COLOR_MAIL_BLUE;
+        case SP_MUSIC:           return COLOR_REDDISH_PINK;
+        case SP_REDDIT:          return COLOR_REDDIT_ORANGE;
+        case SP_YOUTUBE:         return COLOR_RED;
+        case SP_MESSAGES:        return COLOR_YELLOW_GREEN;
+        case SP_MOTORSPORT:      return COLOR_FERRARI_RED;
+        case SP_LOCALHOST:       return COLOR_LOCAL_NAVY;
+        case SP_FEYNCHAT:        return COLOR_FEYN_INDIGO;
+        case SP_PASSWORD_MANAGER: return COLOR_SECURITY_GOLD;
+        default:                 return COLOR_PURPLE;
     }
 }
 
-static rgb_color_t get_layer3_color(uint16_t keycode) {
+// Layer 3 RGB control color handling
+static RGB get_layer3_color(uint16_t keycode) {
     if (IS_RGB_CONTROL(keycode)) {
-        return COLORS.CYAN;
+        return COLOR_CYAN;
     } else if (keycode == QK_BOOT) {
-        return COLORS.RED;
+        return COLOR_RED;
     } else if (IS_VOLUME_KEY(keycode)) {
-        return COLORS.YELLOW_GREEN;
+        return COLOR_YELLOW_GREEN;
     } else if (IS_MEDIA_KEY(keycode)) {
-        return COLORS.BRIGHT_BLUE;
+        return COLOR_BRIGHT_BLUE;
     } else {
-        return COLORS.BLACK;
+        return COLOR_BLACK;
     }
 }
 
 // Main function to get color based on keycode and layer
-static rgb_color_t get_key_color(uint16_t keycode, uint8_t layer) {
+static RGB get_key_color(uint16_t keycode, uint8_t layer) {
     // Check highest priority keys first - these override layer settings
     if (IS_CRITICAL_KEY(keycode)) {
-        return COLORS.RED;
+        return COLOR_RED;
     }
     
     if (IS_BUN_MACRO(keycode)) {
-        return COLORS.HOT_PINK;
+        return COLOR_HOT_PINK;
     }
     
     // Layer-specific coloring
@@ -160,22 +153,22 @@ static rgb_color_t get_key_color(uint16_t keycode, uint8_t layer) {
     
     // Base layer (0) coloring by key type
     if (IS_LAYER_KEY(keycode)) {
-        return COLORS.YELLOW_GREEN;
+        return COLOR_YELLOW_GREEN;
     } else if (IS_ALPHA(keycode)) {
-        return COLORS.PURPLE;
+        return COLOR_PURPLE;
     } else if (IS_MODIFIER(keycode)) {
-        return COLORS.YELLOW_GREEN;
+        return COLOR_YELLOW_GREEN;
     } else if (IS_SPECIAL_KEY(keycode)) {
-        return COLORS.CYAN;
+        return COLOR_CYAN;
     }
     
     // Default color
-    return COLORS.PURPLE;
+    return COLOR_PURPLE;
 }
 
 // Apply brightness scaling to a color
-static rgb_color_t scale_color(rgb_color_t color, float brightness) {
-    rgb_color_t scaled = {
+static RGB scale_color(RGB color, float brightness) {
+    RGB scaled = {
         .r = (uint8_t)((float)color.r * brightness),
         .g = (uint8_t)((float)color.g * brightness),
         .b = (uint8_t)((float)color.b * brightness)
@@ -193,7 +186,7 @@ static bool corne_layer_rgb(effect_params_t* params) {
     
     // Loop through all LEDs
     for (uint8_t i = led_min; i < led_max; i++) {
-        rgb_color_t color = COLORS.PURPLE;  // Default color
+        RGB color = COLOR_PURPLE;  // Default color
         
         // Find which key this LED belongs to
         for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
