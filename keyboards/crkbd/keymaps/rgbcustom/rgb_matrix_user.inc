@@ -51,6 +51,7 @@ RGB_MATRIX_EFFECT(corne_layer_rgb)
 #define IS_SC_MACRO(kc) (kc == SGUI(KC_3) || kc == SGUI(KC_4) || kc == SGUI(KC_5))
 #define IS_CRITICAL_KEY(kc) (kc == KC_ENT || kc == KC_SPC || kc == KC_BSPC || kc == KC_DEL)
 #define IS_TEXT_SELECTION(kc) (kc == LSFT(LGUI(KC_LEFT)) || kc == LSFT(LGUI(KC_RIGHT)) || kc == LSFT(LALT(KC_LEFT)) || kc == LSFT(LALT(KC_RIGHT)))
+#define IS_PAGE_KEY(kc) (kc == KC_PGUP || kc == KC_PGDN)
 
 // Layer 1 specific color handling
 static RGB get_layer1_color(uint16_t keycode) {
@@ -132,6 +133,8 @@ static RGB get_layer3_color(uint16_t keycode) {
         return COLOR_YELLOW_GREEN;
     } else if (IS_MEDIA_KEY(keycode)) {
         return COLOR_BRIGHT_BLUE;
+    } else if (IS_PAGE_KEY(keycode)) {
+        return COLOR_PINK;
     } else {
         return COLOR_BLACK;
     }
